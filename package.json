@@ -60,8 +60,10 @@
     "webpack-merge": "^5.8.0"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.0",
     "react-hook-form": "^7.33.0",
     "react-router": "^6.3.0",
+    "react-router-dom": "^6.3.0",
     "styled-components": "^5.3.5"
   }
 }
