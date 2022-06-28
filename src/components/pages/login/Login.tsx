@@ -39,7 +39,7 @@ const Login = () => {
   };
   const handleBlur = (e) => {
     const user = users.find((user) => user.login === e.target.value);
-    if (user.isRememberPassword) setValue("password", user.password);
+    if (user?.isRememberPassword) setValue("password", user.password);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
