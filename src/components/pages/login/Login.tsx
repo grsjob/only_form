@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { IUser } from "../../../types/user";
 
@@ -9,10 +9,12 @@ const Login = () => {
     handleSubmit,
     reset,
   } = useForm<IUser>({});
+
   const onSubmit = (data: IUser) => {
     console.log(data);
     reset();
   };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <label>

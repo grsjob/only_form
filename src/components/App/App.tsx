@@ -5,22 +5,11 @@ import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import Profile from "../pages/profile/Profile";
 import NotFound from "../pages/not-found/NotFound";
-import { IAutorizationContext, AuthorizationContext } from "../../context";
+import { AuthorizationProvider } from "../../context";
 
 const App = () => {
-  const authorization: IAutorizationContext = {
-    isAuthorized: false,
-    logIn() {
-      this.isAuthorized = true;
-      console.log(`isAuthorized ${this.isAuthorized}`);
-    },
-    logOut() {
-      this.isAuthorized = false;
-      console.log(`isAuthorized ${this.isAuthorized}`);
-    },
-  };
   return (
-    <AuthorizationContext.Provider value={authorization}>
+    <AuthorizationProvider>
       <Routes>
         <Route path="/" element={<PageWrapper />}>
           <Route index element={<Home />} />
@@ -29,7 +18,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </AuthorizationContext.Provider>
+    </AuthorizationProvider>
   );
 };
 
