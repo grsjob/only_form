@@ -5,7 +5,10 @@ import { store } from "../../../state/store";
 import { logIn } from "../../../state/slices/AppSlice";
 import { useNavigate } from "react-router";
 import { useStore } from "../../../state/storeHooks";
-import { rememberPassword } from "../../../state/slices/UserSlice";
+import {
+  rememberPassword,
+  setCurrentUser,
+} from "../../../state/slices/UserSlice";
 
 const Login = () => {
   const { users } = useStore(({ user }) => user);
@@ -29,6 +32,8 @@ const Login = () => {
         store.dispatch(rememberPassword(registeredUser.login));
       }
       store.dispatch(logIn());
+      store.dispatch(setCurrentUser(registeredUser.login));
+
       navigate("/profile");
     }
   };
@@ -44,10 +49,10 @@ const Login = () => {
           name="login"
           control={control}
           rules={{ required: true }}
-          render={({ field, fieldState: { error } }) => (
+          render={({ field }) => (
             <>
               <input {...field} onBlur={handleBlur} />
-              {error && <p>Обязательное поле логин</p>}
+              {errors.login && <p>Обязательное поле логин</p>}
             </>
           )}
         />

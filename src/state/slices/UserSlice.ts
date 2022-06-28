@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
   users: IUser[];
+  currentUser: IUser;
 }
 
 const initialState: UserState = {
@@ -13,6 +14,7 @@ const initialState: UserState = {
       isRememberPassword: true,
     },
   ],
+  currentUser: null,
 };
 
 const slice = createSlice({
@@ -27,8 +29,11 @@ const slice = createSlice({
         return user;
       });
     },
+    setCurrentUser: (state, { payload: login }: PayloadAction<string>) => {
+      state.currentUser = state.users.find((user) => user.login === login);
+    },
   },
 });
 
-export const { rememberPassword } = slice.actions;
+export const { rememberPassword, setCurrentUser } = slice.actions;
 export default slice.reducer;
