@@ -6,7 +6,6 @@ import { logIn } from "../../../state/slices/AppSlice";
 import { useNavigate } from "react-router";
 import { useStore } from "../../../state/storeHooks";
 import { rememberPassword } from "../../../state/slices/UserSlice";
-import CustomInput from "../../custom-input/CustomInput";
 
 const Login = () => {
   const { users } = useStore(({ user }) => user);
@@ -16,7 +15,6 @@ const Login = () => {
     formState: { errors, isSubmitting },
     handleSubmit,
     setValue,
-    getValues,
     control,
   } = useForm<IUser>({ defaultValues: { login: "" } });
 
@@ -36,7 +34,7 @@ const Login = () => {
   };
   const handleBlur = (e) => {
     const user = users.find((user) => user.login === e.target.value);
-    if (user) setValue("password", user.password);
+    if (user.isRememberPassword) setValue("password", user.password);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
