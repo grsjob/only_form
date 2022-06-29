@@ -1,14 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { IUser } from "../../../types/user";
 import { store } from "../../../state/store";
 import { logIn } from "../../../state/slices/AppSlice";
 import { useNavigate } from "react-router";
-import { useStore } from "../../../state/storeHooks";
-import {
-  rememberPassword,
-  setCurrentUser,
-} from "../../../state/slices/UserSlice";
+import { setCurrentUser } from "../../../state/slices/UserSlice";
 import {
   StyledCheckbox,
   StyledError,
@@ -20,32 +16,34 @@ import {
   StyledServerError,
   StyledSubmitButton,
 } from "./loginStyles";
+import { checkAuth } from "../../../backend/backend";
+import { useStore } from "../../../state/storeHooks";
 
 const Login = () => {
-  const { users } = useStore(({ user }) => user);
+  const { isAuthorized } = useStore(({ app }) => app);
   const [serverError, setServerError] = useState(false);
   const [invalidUser, setInvalidUser] = useState("");
   const navigate = useNavigate();
+  useEffect(() => {
+    if (isAuthorized) {
+      navigate("/profile");
+    }
+  }, [isAuthorized]);
   const {
     register,
     formState: { errors, isSubmitting },
     handleSubmit,
-    setValue,
     control,
   } = useForm<IUser>({ defaultValues: { login: "" } });
 
   const onSubmit = (data: IUser) => {
-    const registeredUser = users.find((user) => {
-      if (user.login === data.login && user.password === data.password) {
-        return user;
-      }
-    });
-    if (registeredUser) {
-      if (data.isRememberPassword) {
-        store.dispatch(rememberPassword(registeredUser.login));
+    const user = checkAuth(data);
+    if (user) {
+      if (data.isRememberMe) {
+        localStorage.setItem("user", JSON.stringify(data));
       }
       store.dispatch(logIn());
-      store.dispatch(setCurrentUser(registeredUser.login));
+      store.dispatch(setCurrentUser(user.login));
 
       navigate("/profile");
     } else {
@@ -53,57 +51,56 @@ const Login = () => {
       setInvalidUser(data.login);
     }
   };
-  const handleBlur = (e) => {
-    const user = users.find((user) => user.login === e.target.value);
-    if (user?.isRememberPassword) setValue("password", user.password);
-  };
+
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
-      {serverError && (
-        <StyledServerError>
-          Пользователя {invalidUser} не существует
-        </StyledServerError>
-      )}
-      <StyledLableForInput>Логин</StyledLableForInput>
-      <Controller
-        name="login"
-        control={control}
-        rules={{ required: true }}
-        render={({ field }) => (
-          <StyledInputWrapper>
-            <StyledInput {...field} errors={errors.login} onBlur={handleBlur} />
-            {errors.login && <StyledError>Обязательное поле</StyledError>}
-          </StyledInputWrapper>
+    !isAuthorized && (
+      <StyledForm onSubmit={handleSubmit(onSubmit)}>
+        {serverError && (
+          <StyledServerError>
+            Пользователя {invalidUser} не существует
+          </StyledServerError>
         )}
-      />
-
-      <StyledLableForInput>Пароль</StyledLableForInput>
-      <StyledInputWrapper>
-        <StyledInput
-          errors={errors.password}
-          type="password"
-          {...register("password", { required: true })}
+        <StyledLableForInput>Логин</StyledLableForInput>
+        <Controller
+          name="login"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <StyledInputWrapper>
+              <StyledInput {...field} errors={errors.login} />
+              {errors.login && <StyledError>Обязательное поле</StyledError>}
+            </StyledInputWrapper>
+          )}
         />
-        {errors.password && <StyledError>Обязательное поле</StyledError>}
-      </StyledInputWrapper>
 
-      <StyledCheckbox
-        className="visually-hidden "
-        type="checkbox"
-        id="isRememberPassword"
-        {...register("isRememberPassword")}
-      />
-      <StyledLabelForCheckbox
-        className="lableCheckbox"
-        htmlFor="isRememberPassword"
-      >
-        Запомнить пароль
-      </StyledLabelForCheckbox>
+        <StyledLableForInput>Пароль</StyledLableForInput>
+        <StyledInputWrapper>
+          <StyledInput
+            errors={errors.password}
+            type="password"
+            {...register("password", { required: true })}
+          />
+          {errors.password && <StyledError>Обязательное поле</StyledError>}
+        </StyledInputWrapper>
 
-      <StyledSubmitButton type="submit" disabled={isSubmitting}>
-        Войти
-      </StyledSubmitButton>
-    </StyledForm>
+        <StyledCheckbox
+          className="visually-hidden "
+          type="checkbox"
+          id="isRememberPassword"
+          {...register("isRememberMe")}
+        />
+        <StyledLabelForCheckbox
+          className="lableCheckbox"
+          htmlFor="isRememberPassword"
+        >
+          Запомнить меня
+        </StyledLabelForCheckbox>
+
+        <StyledSubmitButton type="submit" disabled={isSubmitting}>
+          Войти
+        </StyledSubmitButton>
+      </StyledForm>
+    )
   );
 };
 

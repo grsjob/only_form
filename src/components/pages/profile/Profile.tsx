@@ -10,9 +10,14 @@ const Profile = () => {
   return (
     <>
       <StyledTitle>
-        Здравствуйте, <StyledCurrentUser>{currentUser.login}</StyledCurrentUser>
+        Здравствуйте, <StyledCurrentUser>{currentUser}</StyledCurrentUser>
       </StyledTitle>
-      <StyledLogOut onClick={() => store.dispatch(logOut())}>
+      <StyledLogOut
+        onClick={() => {
+          localStorage.removeItem("user");
+          store.dispatch(logOut());
+        }}
+      >
         Выйти
       </StyledLogOut>
     </>
