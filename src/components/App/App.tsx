@@ -1,4 +1,5 @@
 import React from "react";
+import "../../assets/scss/App.scss";
 import { Route, Routes } from "react-router-dom";
 import PageWrapper from "../layout/page-wrapper/PageWrapper";
 import Login from "../pages/login/Login";

@@ -9,6 +9,14 @@ import {
   rememberPassword,
   setCurrentUser,
 } from "../../../state/slices/UserSlice";
+import {
+  StyledCheckbox,
+  StyledForm,
+  StyledInput,
+  StyledLabelForCheckbox,
+  StyledLableForInput,
+  StyledSubmitButton,
+} from "./loginStyles";
 
 const Login = () => {
   const { users } = useStore(({ user }) => user);
@@ -42,35 +50,44 @@ const Login = () => {
     if (user?.isRememberPassword) setValue("password", user.password);
   };
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <label>
-        Логин
-        <Controller
-          name="login"
-          control={control}
-          rules={{ required: true }}
-          render={({ field }) => (
-            <>
-              <input {...field} onBlur={handleBlur} />
-              {errors.login && <p>Обязательное поле логин</p>}
-            </>
-          )}
-        />
-      </label>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      <StyledLableForInput>Логин</StyledLableForInput>
+      <Controller
+        name="login"
+        control={control}
+        rules={{ required: true }}
+        render={({ field }) => (
+          <>
+            <StyledInput {...field} onBlur={handleBlur} />
+            {errors.login && <p>Обязательное поле логин</p>}
+          </>
+        )}
+      />
 
-      <label>
-        Пароль
-        <input type="password" {...register("password", { required: true })} />
-        {errors.password && <p>Обязательное поле пароль</p>}
-      </label>
-      <label>
+      <StyledLableForInput>Пароль</StyledLableForInput>
+      <StyledInput
+        type="password"
+        {...register("password", { required: true })}
+      />
+      {errors.password && <p>Обязательное поле пароль</p>}
+
+      <StyledCheckbox
+        className="visually-hidden "
+        type="checkbox"
+        id="isRememberPassword"
+        {...register("isRememberPassword")}
+      />
+      <StyledLabelForCheckbox
+        className="lableCheckbox"
+        htmlFor="isRememberPassword"
+      >
         Запомнить пароль
-        <input type="checkbox" {...register("isRememberPassword")} />
-      </label>
-      <button type="submit" disabled={isSubmitting}>
+      </StyledLabelForCheckbox>
+
+      <StyledSubmitButton type="submit" disabled={isSubmitting}>
         Войти
-      </button>
-    </form>
+      </StyledSubmitButton>
+    </StyledForm>
   );
 };
 

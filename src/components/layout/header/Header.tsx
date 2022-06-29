@@ -1,10 +1,11 @@
 import React from "react";
+import { StyledHeader, StyledMainTitle } from "./headerStyles";
 
 const Header = () => {
   return (
-    <header>
-      <h1>APP</h1>
-    </header>
+    <StyledHeader>
+      <StyledMainTitle>ONLY.</StyledMainTitle>
+    </StyledHeader>
   );
 };
 
