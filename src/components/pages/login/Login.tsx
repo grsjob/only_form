@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { IUser } from "../../../types/user";
 import { store } from "../../../state/store";
@@ -17,11 +17,14 @@ import {
   StyledInputWrapper,
   StyledLabelForCheckbox,
   StyledLableForInput,
+  StyledServerError,
   StyledSubmitButton,
 } from "./loginStyles";
 
 const Login = () => {
   const { users } = useStore(({ user }) => user);
+  const [serverError, setServerError] = useState(false);
+  const [invalidUser, setInvalidUser] = useState("");
   const navigate = useNavigate();
   const {
     register,
@@ -45,6 +48,9 @@ const Login = () => {
       store.dispatch(setCurrentUser(registeredUser.login));
 
       navigate("/profile");
+    } else {
+      setServerError(true);
+      setInvalidUser(data.login);
     }
   };
   const handleBlur = (e) => {
@@ -53,6 +59,11 @@ const Login = () => {
   };
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
+      {serverError && (
+        <StyledServerError>
+          Пользователя {invalidUser} не существует
+        </StyledServerError>
+      )}
       <StyledLableForInput>Логин</StyledLableForInput>
       <Controller
         name="login"

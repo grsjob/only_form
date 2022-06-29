@@ -83,3 +83,28 @@ export const StyledSubmitButton = styled.button`
     opacity: 0.8;
   }
 `;
+
+export const StyledServerError = styled.p`
+  background-color: #f5e9e9;
+  border: 1px solid #e26f6f;
+  padding: 22px 55px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 500;
+  position: relative;
+  &:after {
+    content: "!";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 20px;
+    left: 20px;
+    color: #ee6565;
+    background-color: #ffc8c8;
+    border-radius: 50%;
+  }
+`;
