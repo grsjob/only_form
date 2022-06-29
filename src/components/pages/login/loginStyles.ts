@@ -37,15 +37,27 @@ export const StyledLableForInput = styled.label`
 
 export const StyledInput = styled.input`
   min-height: 60px;
+  width: 100%;
   background-color: #f5f5f5;
   border-radius: 8px;
-  margin-bottom: 2%;
   font-size: 16px;
   line-height: 19px;
   color: #232323;
   padding: 20px;
   box-sizing: border-box;
-  border: none;
+  border: ${(props) => (props.errors ? `1px solid red` : `none`)};
+`;
+export const StyledInputWrapper = styled.div`
+  position: relative;
+  margin-bottom: 4%;
+`;
+export const StyledError = styled.p`
+  margin: 0;
+  padding: 0;
+  color: red;
+  position: absolute;
+  bottom: -22px;
+  left: 0;
 `;
 
 export const StyledCheckbox = styled.input`
@@ -64,4 +76,10 @@ export const StyledSubmitButton = styled.button`
   border: none;
   font-size: 18px;
   line-height: 22px;
+  &:active {
+    transition: 0.3s all;
+    transform: translateY(3px);
+    border: 1px solid transparent;
+    opacity: 0.8;
+  }
 `;

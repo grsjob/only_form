@@ -11,7 +11,7 @@ const initialState: UserState = {
     {
       login: "steve.jobs@example.com",
       password: "password",
-      isRememberPassword: true,
+      isRememberPassword: false,
     },
   ],
   currentUser: null,

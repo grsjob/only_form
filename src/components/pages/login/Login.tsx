@@ -11,8 +11,10 @@ import {
 } from "../../../state/slices/UserSlice";
 import {
   StyledCheckbox,
+  StyledError,
   StyledForm,
   StyledInput,
+  StyledInputWrapper,
   StyledLabelForCheckbox,
   StyledLableForInput,
   StyledSubmitButton,
@@ -57,19 +59,22 @@ const Login = () => {
         control={control}
         rules={{ required: true }}
         render={({ field }) => (
-          <>
-            <StyledInput {...field} onBlur={handleBlur} />
-            {errors.login && <p>Обязательное поле логин</p>}
-          </>
+          <StyledInputWrapper>
+            <StyledInput {...field} errors={errors.login} onBlur={handleBlur} />
+            {errors.login && <StyledError>Обязательное поле</StyledError>}
+          </StyledInputWrapper>
         )}
       />
 
       <StyledLableForInput>Пароль</StyledLableForInput>
-      <StyledInput
-        type="password"
-        {...register("password", { required: true })}
-      />
-      {errors.password && <p>Обязательное поле пароль</p>}
+      <StyledInputWrapper>
+        <StyledInput
+          errors={errors.password}
+          type="password"
+          {...register("password", { required: true })}
+        />
+        {errors.password && <StyledError>Обязательное поле</StyledError>}
+      </StyledInputWrapper>
 
       <StyledCheckbox
         className="visually-hidden "
